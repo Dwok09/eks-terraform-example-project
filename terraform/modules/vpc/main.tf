@@ -8,19 +8,21 @@ resource "aws_vpc" "main_vpc" {
 
 resource "aws_subnet" "public_subnet" {
   vpc_id = aws_vpc.main_vpc.id
-  cidr_block = var.subnet_cidr
+  cidr_block = var.public_subnet_cidr
 
   tags = {
-    Name = "${var.environment}_public_subnet"
+    Name = "${var.environment}_public_subnet",
+    "kubernetes.io/role/elb" = "1"
   }
 }
 
 resource "aws_subnet" "private_subnet" {
   vpc_id = aws_vpc.main_vpc.id
-  cidr_block = var.subnet_cidr
+  cidr_block = var.private_subnet_cidr
 
   tags = {
-    Name = "${var.environment}_public_subnet"
+    Name = "${var.environment}_private_subnet",
+    "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
@@ -49,7 +51,29 @@ resource "aws_nat_gateway" "public_nat_gw" {
     Name = "${var.environment}_public_nat_gw"
   }
 }
-# resource "aws_subnet" "private_subnet" {
-#   vpc_id = module.vpc.vpc_id
-#   cidr_block = "10.10.20.0/24"
-# }
+
+resource "aws_route_table" "public_route_table" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main_int_gw.id
+  }
+
+  tags = {
+    Name = "public_route_table"
+  }
+}
+
+resource "aws_route_table" "private_route_table" {
+  vpc_id = aws_vpc.main_vpc.id
+
+  route {
+    cidr_block =  "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.public_nat_gw.id
+  }
+
+  tags = {
+    Name = "private_route_table"
+  }
+}
