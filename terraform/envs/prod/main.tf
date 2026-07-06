@@ -4,10 +4,6 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 3.0"
-    }
     helm = {
       source  = "hashicorp/helm"
       version = "~> 3.0"
@@ -46,7 +42,6 @@ module "eks" {
   cluster_name        = "${var.environment}-eks"
   vpc_id              = module.vpc.vpc_id
   subnet_ids          = module.vpc.private_subnet_ids
-  node_instance_types = "t3.small"
 }
 
 module "workloads" {

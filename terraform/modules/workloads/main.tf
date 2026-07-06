@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 3.0"
+    }
+  }
+}
+
 resource "helm_release" "podinfo" {
   name             = "podinfo"
   namespace        = "podinfo"
