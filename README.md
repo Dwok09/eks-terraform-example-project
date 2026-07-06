@@ -171,7 +171,7 @@ kubectl -n podinfo port-forward svc/podinfo 8080:9898
 ```
 
 You should see:
-![podinfo running on EKS](assets/podinfo.png)
+![podinfo running on EKS](.github/assets/podinfo.png)
  
 ---
  
