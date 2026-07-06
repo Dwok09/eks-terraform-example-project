@@ -3,7 +3,7 @@ variable "cluster_name" {
 }
 
 variable "kubernetes_version" {
-  type = string
+  type    = string
   default = "1.35"
 }
 
@@ -16,21 +16,21 @@ variable "subnet_ids" {
 }
 
 variable "node_instance_types" {
-  type = list(string)
+  type    = list(string)
   default = ["t3.small"]
 }
 
 variable "node_desired_size" {
-  type = number
+  type    = number
   default = 1
 }
 
 variable "node_min_size" {
-  type = number
+  type    = number
   default = 1
 }
 
 variable "node_max_size" {
-  type = number
+  type    = number
   default = 2
 }

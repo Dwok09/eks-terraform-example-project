@@ -7,33 +7,33 @@ resource "aws_vpc" "main_vpc" {
 }
 
 resource "aws_subnet" "public_subnet" {
-  vpc_id = aws_vpc.main_vpc.id
+  vpc_id     = aws_vpc.main_vpc.id
   cidr_block = var.public_subnet_cidr
 
   tags = {
-    Name = "${var.environment}_public_subnet",
+    Name                     = "${var.environment}_public_subnet",
     "kubernetes.io/role/elb" = "1"
   }
 }
 
 resource "aws_subnet" "private_subnet" {
-  vpc_id = aws_vpc.main_vpc.id
-  cidr_block = var.private_subnet_cidr
+  vpc_id            = aws_vpc.main_vpc.id
+  cidr_block        = var.private_subnet_cidr
   availability_zone = var.az_a
 
   tags = {
-    Name = "${var.environment}_private_subnet",
+    Name                              = "${var.environment}_private_subnet",
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
 
 resource "aws_subnet" "private_subnet_secondary" {
-  vpc_id = aws_vpc.main_vpc.id
-  cidr_block = var.private_subnet_cidr_secondary
+  vpc_id            = aws_vpc.main_vpc.id
+  cidr_block        = var.private_subnet_cidr_secondary
   availability_zone = var.az_b
 
   tags = {
-    Name = "${var.environment}_private_subnet_secondary",
+    Name                              = "${var.environment}_private_subnet_secondary",
     "kubernetes.io/role/internal-elb" = "1"
   }
 }
@@ -55,8 +55,8 @@ resource "aws_eip" "nat_eip" {
 }
 
 resource "aws_nat_gateway" "public_nat_gw" {
-  subnet_id  = aws_subnet.public_subnet.id
-  depends_on = [aws_internet_gateway.main_int_gw]
+  subnet_id     = aws_subnet.public_subnet.id
+  depends_on    = [aws_internet_gateway.main_int_gw]
   allocation_id = aws_eip.nat_eip.id
 
   tags = {
@@ -81,7 +81,7 @@ resource "aws_route_table" "private_route_table" {
   vpc_id = aws_vpc.main_vpc.id
 
   route {
-    cidr_block =  "0.0.0.0/0"
+    cidr_block     = "0.0.0.0/0"
     nat_gateway_id = aws_nat_gateway.public_nat_gw.id
   }
 

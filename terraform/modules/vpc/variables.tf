@@ -19,11 +19,11 @@ variable "environment" {
 }
 
 variable "az_a" {
-  type = string
+  type    = string
   default = "us-east-1a"
 }
 
 variable "az_b" {
-  type = string
+  type    = string
   default = "us-east-1b"
 }
